@@ -12,11 +12,3 @@ module.exports = router;
 
 
 
-// {
-//     "name":"vivek",
-//     "lastname":"patel",
-//     "contact":"123456789",
-//     "email":"a@gmail.com",
-//     "password":"a@gmail.com",
-//     "role":"admin"
-// }
