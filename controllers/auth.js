@@ -4,11 +4,12 @@ const bcrypt = require('bcrypt');
 async function register(req, res) {
     const { email, password } = req.body;
     const payload = req.body
+        if (!password) return res.json({ status: 400, message: 'enter password' });
+
     const before = await userModel.findOne({ email: email });
     if (before) return res.json({ status: 400, message: 'user already exists' });
-    const passwordentered = await userModel.findOne({ password: password });
-    if (!passwordentered) return res.json({ status: 400, message: 'enter password' });
     const hashpassword = await bcrypt.hash(req.body.password, 10);
+
     const user = await userModel.create({
         ...payload, password: hashpassword
     })
