@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 async function register(req, res) {
     const { email, password } = req.body;
     const payload = req.body
-        if (!password) return res.json({ status: 400, message: 'enter password' });
+    if (!password) return res.json({ status: 400, message: 'enter password' });
 
     const before = await userModel.findOne({ email: email });
     if (before) return res.json({ status: 400, message: 'user already exists' });
