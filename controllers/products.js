@@ -1,3 +1,4 @@
+const {json} = require("express");
 userModel = require('../models/product')
 
 async function addproduct(req, res) {
@@ -15,7 +16,7 @@ async function addproduct(req, res) {
         const file = req.file;
 
         if (!file) {
-            return res.status(400).json({ message: "Image file is required" });
+            return res.status(400).json({message: "Image file is required"});
         }
 
         const product = await userModel.create({
@@ -30,7 +31,7 @@ async function addproduct(req, res) {
         });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({message: error.message});
     }
 
 }
@@ -40,41 +41,36 @@ async function allproduct(req, res) {
     res.json(user)
 }
 
-// async function deleteproduct(req, res) {
-//     const { id } = req.params;
-//     const product = await userModel.findByIdAndDelete(id);
-//     res.json({
-//         status: 200,
-//         message: "Product Deleted Successfully",
-//         data: product
-//     })
-// }
-
 async function deleteproduct(req, res) {
-    try {
-        const { id } = req.params;
 
-        // Validate the ID format (optional, but good practice)
-        if (!id) {
-            return res.status(400).json({ message: "Product ID is required" });
-        }
-
-        // Find and delete the product
-        const product = await userModel.findByIdAndDelete(id);
-
-        if (!product) {
-            return res.status(404).json({ message: "Product not found" });
-        }
-
-        res.json({
-            status: 200,
-            message: "Product Deleted Successfully",
-            data: product,
-        });
-    } catch (error) {
-        console.error("Error deleting product:", error);
-        res.status(500).json({ message: "Error deleting product", error });
-    }
+    const {id} = req.params;
+    const product = await userModel.findByIdAndDelete(id);
+    res.json({
+        status: 200,
+        message: "Product Deleted Successfully",
+        data: product
+    });
 }
 
-module.exports = { addproduct, allproduct, deleteproduct }
+async function singleproduct(req, res) {
+    const {id} = req.params;
+    const payload = req.body;
+    const product = await userModel.findById(id)
+    res.json({
+        status: 200,
+        message: "Find Single Product Successfully",
+        data: product
+    })
+}
+async function updateproduct(req, res) {
+    const {id} = req.params;
+    const payload = req.body;
+    const product = await userModel.findByIdAndUpdate(id,payload ,{new: true});
+    res.json({
+        status: 200,
+        message: "Product Updated Successfully",
+        data: product
+    })
+}
+
+module.exports = {addproduct, allproduct, deleteproduct ,updateproduct , singleproduct}
