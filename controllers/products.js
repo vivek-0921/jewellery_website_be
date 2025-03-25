@@ -77,4 +77,4 @@ async function deleteproduct(req, res) {
     }
 }
 
-module.exports = { addproduct, allproduct, deleteproduct }
+module.exports = { addproduct, allproduct ,deleteproduct}
