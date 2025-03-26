@@ -62,15 +62,30 @@ async function singleproduct(req, res) {
         data: product
     })
 }
+
 async function updateproduct(req, res) {
-    const {id} = req.params;
-    const payload = req.body;
-    const product = await userModel.findByIdAndUpdate(id,payload ,{new: true});
-    res.json({
-        status: 200,
-        message: "Product Updated Successfully",
-        data: product
-    })
+    try {
+        const { id } = req.params;
+        const payload = req.body;
+
+        // Check if a file is uploaded
+        if (req.file) {
+            payload.image = req.file.path; // Save the new image path
+        }
+
+        const product = await userModel.findByIdAndUpdate(id, payload, { new: true });
+
+        res.json({
+            status: 200,
+            message: "Product Updated Successfully",
+            data: product
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
+
+
 
 module.exports = {addproduct, allproduct, deleteproduct ,updateproduct , singleproduct}
