@@ -20,11 +20,14 @@ async function addproduct(req, res) {
         }
 
         const product = await userModel.create({
-            ...payload, image: file.path
+            ...payload,
+            image: file.path
         });
 
         res.json({
-            status: 200, message: "Product Added Successfully", data: product
+            status: 200,
+            message: "Product Added Successfully",
+            data: product
         });
 
     } catch (error) {
@@ -43,7 +46,9 @@ async function deleteproduct(req, res) {
     const {id} = req.params;
     const product = await userModel.findByIdAndDelete(id);
     res.json({
-        status: 200, message: "Product Deleted Successfully", data: product
+        status: 200,
+        message: "Product Deleted Successfully",
+        data: product
     });
 }
 
@@ -52,19 +57,35 @@ async function singleproduct(req, res) {
     const payload = req.body;
     const product = await userModel.findById(id)
     res.json({
-        status: 200, message: "Find Single Product Successfully", data: product
+        status: 200,
+        message: "Find Single Product Successfully",
+        data: product
     })
 }
 
 async function updateproduct(req, res) {
-    const {id} = req.params;
-    const payload = req.body;
-    const product = await userModel.findByIdAndUpdate(id, payload, {new: true});
-    res.json({
-        status: 200, message: "Product Updated Successfully", data: product
-    })
+    try {
+        const { id } = req.params;
+        const payload = req.body;
+
+        // Check if a file is uploaded
+        if (req.file) {
+            payload.image = req.file.path; // Save the new image path
+        }
+
+        const product = await userModel.findByIdAndUpdate(id, payload, { new: true });
+
+        res.json({
+            status: 200,
+            message: "Product Updated Successfully",
+            data: product
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 
 
 
-module.exports = {addproduct, allproduct, deleteproduct, updateproduct, singleproduct}
+module.exports = {addproduct, allproduct, deleteproduct ,updateproduct , singleproduct}
