@@ -19,13 +19,16 @@ async function register(req, res) {
     })
 }
 
-async function login(req, res) {
-    const { email, password } = req.body;
-    const user = await userModel.findOne({ email: email });
-    if (!user) return res.json({ status: 404, message: 'user not found' });
+async function login (req, res) {
+    const {email, password} = req.body;
+    const user = await userModel.findOne({email: email});
+    if (!user) return res.json({status: 404, message: 'user not found'});
     const isvalid = await bcrypt.compare(password, user.password);
-    if (!isvalid) return res.json({ status: 400, message: 'invalid password' });
-    res.json({ status: 200, message: 'login success', data: user })
+    if (!isvalid) return res.json({status: 400, message: 'invalid password'});
+    res.json({status: 200, message: 'login success', data: user})
+
+    res.cookie('auth', token)
+
 }
 
-module.exports = { register, login }
+module.exports = { register, login}
